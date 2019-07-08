@@ -11,12 +11,14 @@ import android.widget.EditText;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText usernameInput;
     private EditText passwordInput;
     private Button btnLogin;
+    private Button btnSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         usernameInput = findViewById(R.id.etUsernameInput);
         passwordInput = findViewById(R.id.etPasswordInput);
         btnLogin = findViewById(R.id.btnLogin);
+        btnSignUp = findViewById(R.id.btnSignUp);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +37,27 @@ public class MainActivity extends AppCompatActivity {
                 final String password = passwordInput.getText().toString();
                 login(username, password);
              }
+        });
+
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser newUser = new ParseUser();
+                newUser.setUsername(usernameInput.getText().toString());
+                newUser.setPassword(passwordInput.getText().toString());
+
+                newUser.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null) {
+                            Log.d("SignUp", "Sign up successful");
+                        } else {
+                            Log.d("SignUp", "Sign up failed");
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
         });
 
     }

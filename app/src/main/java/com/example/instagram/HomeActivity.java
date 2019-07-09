@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.instagram.model.Post;
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -32,6 +33,8 @@ public class HomeActivity extends AppCompatActivity {
     public String photoFileName = "photo.jpg";
     private File photoFile;
     private List<Post> posts;
+    private RecyclerView rvPosts;
+    private PostAdapter adapter;
 
     private BottomNavigationView bottomNav;
 
@@ -43,6 +46,12 @@ public class HomeActivity extends AppCompatActivity {
         posts = new ArrayList<>();
 
         bottomNav = findViewById(R.id.bottom_navigation);
+        rvPosts = findViewById(R.id.rvPosts);
+        adapter = new PostAdapter(HomeActivity.this, posts);
+        rvPosts.setAdapter(adapter);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvPosts.setLayoutManager(linearLayoutManager);
+        getPosts();
 
 
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -64,16 +73,16 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    //queries post class and returns list of all the posts
     private void getPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.getInBackground("", new GetCallback<Post>() {
+        query.setLimit(20).orderByDescending("createdAt");
+        query.findInBackground(new FindCallback<Post>() {
             @Override
-            public void done(Post object, ParseException e) {
-                if(e == null) {
-
-                } else {
-
-                }
+            public void done(List<Post> objects, ParseException e) {
+                posts.addAll(objects);
+                adapter.notifyItemInserted(0);
+                rvPosts.scrollToPosition(0);
             }
         });
     }

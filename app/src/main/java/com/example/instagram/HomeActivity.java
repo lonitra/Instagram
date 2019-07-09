@@ -5,11 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -30,27 +32,27 @@ public class HomeActivity extends AppCompatActivity {
 
     private Button btnCreate;
     private Button btnRefresh;
+    private BottomNavigationView bottomNav;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        
-        btnCreate = findViewById(R.id.btnCreate);
-        btnRefresh = findViewById(R.id.btnRefresh);
 
-        btnRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadTopPosts();
-            }
-        });
+        bottomNav = findViewById(R.id.bottom_navigation);
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
+
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                launchCamera();
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch(menuItem.getItemId()) {
+                    case R.id.miCapture:
+                        launchCamera();
+                        break;
+
+                }
+                return true;
             }
         });
 

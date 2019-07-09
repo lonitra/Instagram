@@ -1,6 +1,7 @@
 package com.example.instagram;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 
 import java.util.List;
+
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
@@ -61,7 +63,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         return posts.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvUser;
         TextView tvCaption;
         ImageView ivImage;
@@ -71,6 +73,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvUser = itemView.findViewById(R.id.tvUser);
             tvCaption = itemView.findViewById(R.id.tvCaption);
             ivImage = itemView.findViewById(R.id.ivImage);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            if(position != RecyclerView.NO_POSITION) {
+                Post post = posts.get(position);
+                Intent details = new Intent(mContext, PostDetailActivity.class);
+                details.putExtra("PostDetails", post);
+                mContext.startActivity(details);
+            }
         }
     }
 

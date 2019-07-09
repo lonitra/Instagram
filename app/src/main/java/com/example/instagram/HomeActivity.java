@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,7 @@ public class HomeActivity extends AppCompatActivity {
     private List<Post> posts;
     private RecyclerView rvPosts;
     private PostAdapter adapter;
+    private SwipeRefreshLayout swipeContainer;
 
     private BottomNavigationView bottomNav;
 
@@ -43,8 +45,9 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        posts = new ArrayList<>();
 
+        posts = new ArrayList<>();
+        swipeContainer = findViewById(R.id.swipeContainer);
         bottomNav = findViewById(R.id.bottom_navigation);
         rvPosts = findViewById(R.id.rvPosts);
         adapter = new PostAdapter(HomeActivity.this, posts);
@@ -70,12 +73,29 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.clear();
+                getPosts();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
 
     }
 
     //queries post class and returns list of all the posts
     private void getPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include("user");
         query.setLimit(20).orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -120,6 +140,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void loadTopPosts() {
         final Post.Query postQuery = new Post.Query();

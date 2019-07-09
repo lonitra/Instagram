@@ -16,6 +16,7 @@ import com.example.instagram.model.Post;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -52,8 +53,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 viewHolder.ivImage.setImageBitmap(bitmap);
             }
         });
-        //ParseUser user = post.getUser();
-        //viewHolder.tvUser.setText(user.getUsername());
+        ParseUser user = post.getUser();
+        viewHolder.tvUser.setText(user.getUsername());
         viewHolder.tvCaption.setText(post.getDescription());
 
     }
@@ -61,6 +62,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     @Override
     public int getItemCount() {
         return posts.size();
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Post> list) {
+        posts.addAll(list);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

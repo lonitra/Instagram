@@ -50,6 +50,9 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.miCapture:
                         launchCamera();
                         break;
+                    case R.id.miProfile:
+                        startActivity(new Intent(HomeActivity.this, LogoutActivity.class));
+                        break;
 
                 }
                 return true;

@@ -4,7 +4,7 @@
 
     <item
         android:icon="@drawable/ic_home_filled"
-        android:title="Home"
+        android:title=""
         android:enabled="true"
         android:iconTint="@color/gray"
         app:showAsAction="always"/>
@@ -12,7 +12,7 @@
         android:id="@+id/miCapture"
         android:icon="@drawable/ic_capture"
         android:enabled="true"
-        android:title="Capture"
+        android:title=""
         android:iconTint="@color/gray"
         app:showAsAction="always"/>
 
@@ -20,7 +20,7 @@
         android:id="@+id/miProfile"
         android:icon="@drawable/ic_profile"
         android:enabled="true"
-        android:title="Profile"
+        android:title=""
         android:iconTint="@color/gray"
         app:showAsAction="always"/>
 </menu>

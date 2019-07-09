@@ -12,14 +12,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.instagram.model.Post;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -29,9 +31,8 @@ public class HomeActivity extends AppCompatActivity {
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     private File photoFile;
+    private List<Post> posts;
 
-    private Button btnCreate;
-    private Button btnRefresh;
     private BottomNavigationView bottomNav;
 
 
@@ -39,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        posts = new ArrayList<>();
 
         bottomNav = findViewById(R.id.bottom_navigation);
 
@@ -60,6 +62,20 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void getPosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.getInBackground("", new GetCallback<Post>() {
+            @Override
+            public void done(Post object, ParseException e) {
+                if(e == null) {
+
+                } else {
+
+                }
+            }
+        });
     }
 
     private void launchCamera() {

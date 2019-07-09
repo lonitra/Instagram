@@ -29,37 +29,43 @@ public class MainActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.etPasswordInput);
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if(currentUser != null) {
+            Log.d("LoginActivity", "Login successful");
+            Intent toHome = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(toHome);
+            finish(); // finishes login so user cannot press back button to go back to login
+        } else {
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String username = usernameInput.getText().toString();
+                    final String password = passwordInput.getText().toString();
+                    login(username, password);
+                }
+            });
 
+            btnSignUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ParseUser newUser = new ParseUser();
+                    newUser.setUsername(usernameInput.getText().toString());
+                    newUser.setPassword(passwordInput.getText().toString());
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String username =  usernameInput.getText().toString();
-                final String password = passwordInput.getText().toString();
-                login(username, password);
-             }
-        });
-
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser newUser = new ParseUser();
-                newUser.setUsername(usernameInput.getText().toString());
-                newUser.setPassword(passwordInput.getText().toString());
-
-                newUser.signUpInBackground(new SignUpCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e == null) {
-                            Log.d("SignUp", "Sign up successful");
-                        } else {
-                            Log.d("SignUp", "Sign up failed");
-                            e.printStackTrace();
+                    newUser.signUpInBackground(new SignUpCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d("SignUp", "Sign up successful");
+                            } else {
+                                Log.d("SignUp", "Sign up failed");
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
 
     }
 
@@ -79,5 +85,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }
 

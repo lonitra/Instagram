@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -37,7 +38,9 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView rvPosts;
     private PostAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
-
+    private FloatingActionButton fabLike;
+    private FloatingActionButton fabComment;
+    private FloatingActionButton fabMessage;
     private BottomNavigationView bottomNav;
 
 
@@ -45,18 +48,27 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         posts = new ArrayList<>();
         swipeContainer = findViewById(R.id.swipeContainer);
         bottomNav = findViewById(R.id.bottom_navigation);
+
+        fabComment = findViewById(R.id.fabComment);
+        fabMessage = findViewById(R.id.fabMessage);
         rvPosts = findViewById(R.id.rvPosts);
         adapter = new PostAdapter(HomeActivity.this, posts);
         rvPosts.setAdapter(adapter);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvPosts.setLayoutManager(linearLayoutManager);
         getPosts();
+        navigationSetUp();
+        swipeToRefresh();
 
 
+
+    }
+
+
+    private void navigationSetUp() {
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -72,7 +84,9 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
+    private void swipeToRefresh() {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -83,11 +97,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
 
 
     }
@@ -100,9 +114,13 @@ public class HomeActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
-                posts.addAll(objects);
-                adapter.notifyItemInserted(0);
-                rvPosts.scrollToPosition(0);
+                if(e == null) {
+                    posts.addAll(objects);
+                    adapter.notifyItemInserted(0);
+                    rvPosts.scrollToPosition(0);
+                } else {
+                    Log.d("HomeActivity", "get post failed");
+                }
             }
         });
     }

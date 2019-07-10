@@ -45,8 +45,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/instagram_android_assets/drawable-xxhdpi/ufi_new_direct.png" />
-                                      <entry key="outputName" value="ic_message" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Downloads/instagram_android_assets/drawable-xxhdpi/ufi_heart_active.png" />
+                                      <entry key="outputName" value="ic_like_fill" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>

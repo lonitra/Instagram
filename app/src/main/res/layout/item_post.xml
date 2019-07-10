@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/fabMessage" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabLike"
+        android:id="@+id/fabFavorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -79,7 +79,7 @@
         app:borderWidth="0dp"
         app:elevation="0dp"
         app:layout_constraintEnd_toStartOf="@+id/fabMessage"
-        app:layout_constraintStart_toEndOf="@+id/fabLike"
+        app:layout_constraintStart_toEndOf="@+id/fabFavorite"
         app:layout_constraintTop_toBottomOf="@+id/ivImage"
         app:srcCompat="@android:color/background_dark" />
 

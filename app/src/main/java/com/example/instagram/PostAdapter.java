@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -28,6 +31,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     Context mContext;
     List<Post> posts;
+    boolean likeClick;
+
 
     public PostAdapter(Context context, List<Post> posts) {
         mContext = context;
@@ -40,7 +45,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.item_post, viewGroup, false);
-
         ViewHolder viewHolder = new ViewHolder(contactView);
         return viewHolder;
     }
@@ -61,6 +65,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.tvCaption.setText(post.getDescription());
         viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
 
+        viewHolder.fabLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!likeClick) {
+                    viewHolder.fabLike.setColorFilter(mContext.getResources().getColor(R.color.medium_red));
+                    viewHolder.fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like_fill));
+                } else {
+                    viewHolder.fabLike.setColorFilter(Color.DKGRAY);
+                    viewHolder.fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+                }
+                likeClick = !likeClick;
+            }
+        });
+
     }
 
     @Override
@@ -68,11 +86,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         return posts.size();
     }
 
-    // Clean all elements of the recycler
-    public void clear() {
-        posts.clear();
-        notifyDataSetChanged();
-    }
 
     public String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
@@ -97,11 +110,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         notifyDataSetChanged();
     }
 
+    // Clean all elements of the recycler
+    public void clear() {
+        posts.clear();
+        notifyDataSetChanged();
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvUser;
         TextView tvCaption;
         ImageView ivImage;
         TextView tvDate;
+        FloatingActionButton fabLike;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,6 +130,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvCaption = itemView.findViewById(R.id.tvCaption);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDate = itemView.findViewById(R.id.tvDate);
+            fabLike = itemView.findViewById(R.id.fabFavorite);
             itemView.setOnClickListener(this);
         }
 

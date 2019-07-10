@@ -43,10 +43,10 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivImage"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/fabDirect"
+        app:layout_constraintVertical_bias="0.018" />
 
     <TextView
         android:id="@+id/tvDate"
@@ -63,4 +63,51 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tvUsername"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:clickable="true"
+        android:src="@drawable/ic_like"
+        android:backgroundTint="@android:color/transparent"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage"
+        app:srcCompat="@android:color/background_dark" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:clickable="true"
+        android:src="@drawable/ic_comment"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:layout_constraintStart_toEndOf="@+id/fabFavorite"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage"
+        app:srcCompat="@android:color/background_dark" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabDirect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="232dp"
+        android:layout_marginRight="232dp"
+        android:backgroundTint="@android:color/transparent"
+        android:clickable="true"
+        android:src="@drawable/ic_message"
+        app:borderWidth="0dp"
+        app:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/fabComment"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage"
+        app:srcCompat="@android:color/background_dark" />
 </android.support.constraint.ConstraintLayout>

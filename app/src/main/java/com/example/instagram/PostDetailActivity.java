@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.example.instagram.model.Post;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -30,6 +32,7 @@ public class PostDetailActivity extends AppCompatActivity {
     private FloatingActionButton fabFavorite;
     private FloatingActionButton fabComment;
     private FloatingActionButton fabDirect;
+    private TextView tvLikes;
     private boolean likeClick;
 
     @Override
@@ -44,6 +47,7 @@ public class PostDetailActivity extends AppCompatActivity {
         fabComment = findViewById(R.id.fabComment);
         fabDirect = findViewById(R.id.fabDirect);
         fabFavorite = findViewById(R.id.fabFavorite);
+        tvLikes = findViewById(R.id.tvLikes);
 
         Intent intent = getIntent();
         Post post = (Post) intent.getExtras().get("PostDetails");
@@ -51,6 +55,9 @@ public class PostDetailActivity extends AppCompatActivity {
         tvUsername.setText(post.getUser().getUsername());
         tvCaption.setText(post.getDescription());
         tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
+        if(post.getLikes() != null || post.getLikes().intValue() != 0) {
+            tvLikes.setText(post.getLikes().intValue() + " likes");
+        }
         ParseFile file = post.getImage();
         file.getDataInBackground(new GetDataCallback() {
             @Override
@@ -60,10 +67,11 @@ public class PostDetailActivity extends AppCompatActivity {
             }
         });
 
-        setLikeListener();
+        setLikeListener(post);
     }
 
-    private void setLikeListener() {
+    //sets up like listener and updates backend to reflect likes
+    private void setLikeListener(final Post post) {
         likeClick = false;
         fabFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,10 +79,32 @@ public class PostDetailActivity extends AppCompatActivity {
                 if(!likeClick) {
                     fabFavorite.setColorFilter(PostDetailActivity.this.getResources().getColor(R.color.medium_red));
                     fabFavorite.setImageDrawable(ContextCompat.getDrawable(PostDetailActivity.this, R.drawable.ic_like_fill));
+                    if(post.getLikes() == null || post.getLikes().intValue() == 0) {
+                        post.setLikes(1);
+                    } else {
+                        post.setLikes(post.getLikes().intValue() + 1);
+                    }
                 } else {
                     fabFavorite.setColorFilter(Color.DKGRAY);
                     fabFavorite.setImageDrawable(ContextCompat.getDrawable(PostDetailActivity.this, R.drawable.ic_like));
+                    post.setLikes(post.getLikes().intValue() - 1);
                 }
+                if(post.getLikes().intValue() == 0) {
+                    tvLikes.setText(null);
+                } else {
+                    tvLikes.setText(post.getLikes().intValue() + " likes");
+                }
+                post.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null) {
+                            Log.d("SaveLikes", "Save successful");
+                        } else {
+                            Log.d("SaveLikes", "Save failed");
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 likeClick = !likeClick;
             }
         });

@@ -64,6 +64,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.tvUser.setText(user.getUsername());
         viewHolder.tvCaption.setText(post.getDescription());
         viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
+        if(post.getNumber("number") != null) {
+            viewHolder.tvLikes.setText(post.getNumber("number").toString());
+        }
 
         viewHolder.fabLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +125,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         TextView tvCaption;
         ImageView ivImage;
         TextView tvDate;
+        TextView tvLikes;
         FloatingActionButton fabLike;
 
         public ViewHolder(@NonNull View itemView) {
@@ -131,6 +135,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDate = itemView.findViewById(R.id.tvDate);
             fabLike = itemView.findViewById(R.id.fabFavorite);
+            tvLikes = itemView.findViewById(R.id.tvLikes);
             itemView.setOnClickListener(this);
         }
 

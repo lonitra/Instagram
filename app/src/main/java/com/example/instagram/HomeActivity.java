@@ -62,9 +62,6 @@ public class HomeActivity extends AppCompatActivity {
         getPosts();
         navigationSetUp();
         swipeToRefresh();
-
-
-
     }
 
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -56,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                Log.d("SignUp", "Sign up successful");
+                                Toast.makeText(MainActivity.this, "Successfully signed up!", Toast.LENGTH_LONG).show();
                             } else {
-                                Log.d("SignUp", "Sign up failed");
+                                Toast.makeText(MainActivity.this, "Username already taken", Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
                             }
                         }

@@ -21,6 +21,5 @@
         android:icon="@drawable/ic_profile"
         android:enabled="true"
         android:title=""
-        android:iconTint="@color/gray"
         app:showAsAction="always"/>
 </menu>

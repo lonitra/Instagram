@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,9 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
@@ -56,6 +59,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         ParseUser user = post.getUser();
         viewHolder.tvUser.setText(user.getUsername());
         viewHolder.tvCaption.setText(post.getDescription());
+        viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
 
     }
 
@@ -70,6 +74,23 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         notifyDataSetChanged();
     }
 
+    public String getRelativeTimeAgo(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
+        return relativeDate;
+    }
+
     // Add a list of items -- change to type used
     public void addAll(List<Post> list) {
         posts.addAll(list);
@@ -80,12 +101,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         TextView tvUser;
         TextView tvCaption;
         ImageView ivImage;
+        TextView tvDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvUser = itemView.findViewById(R.id.tvUser);
             tvCaption = itemView.findViewById(R.id.tvCaption);
             ivImage = itemView.findViewById(R.id.ivImage);
+            tvDate = itemView.findViewById(R.id.tvDate);
             itemView.setOnClickListener(this);
         }
 

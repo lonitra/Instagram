@@ -40,14 +40,14 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. I would like to discuss how to come to a conclusion on the most efficient way to organize the Parse server. For example, it was best to create a whole new Comment class instead of having it be a new column as an array in the Post class.
+2. I would also like to discuss better ways to implement like/unlike. I personally used a boolean to determine whether it the user has already liked the post or not, but I found that this method was flawed and would love to know a better way to implement this.
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='InstagramVideo.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -60,11 +60,11 @@ List an 3rd party libraries, icons, graphics, or other assets you used in your a
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+With this app understanding Parse was challenging, but I found that I enjoy using Parse so I am excited to be using while building my team app. Another challenge for me was making the app look like the real Instagram. 
 
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2019] [Loni Tra]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

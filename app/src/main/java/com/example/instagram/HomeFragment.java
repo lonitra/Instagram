@@ -54,6 +54,10 @@ public class HomeFragment extends Fragment {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvPosts.setLayoutManager(linearLayoutManager);
         swipeToRefresh();
+
+        adapter.clear();
+        getPosts();
+
         return view;
     }
 

@@ -53,7 +53,6 @@ public class Post extends ParseObject {
             super(Post.class);
         }
 
-        //?? don't quite understand this code
         public Query getTop() {
             setLimit(20);
             return this;

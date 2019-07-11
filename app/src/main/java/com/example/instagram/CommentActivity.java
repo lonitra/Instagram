@@ -2,16 +2,31 @@ package com.example.instagram;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.parse.ParseObject;
+import com.example.instagram.model.Comment;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentActivity extends AppCompatActivity {
 
     private EditText etComment;
     private Button btnSend;
+    private String postId;
+    private RecyclerView rvComments;
+    private List<Comment> comments;
+    private CommentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +34,34 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comment);
         etComment = findViewById(R.id.etComment);
         btnSend = findViewById(R.id.btnSend);
+        postId = getIntent().getStringExtra("postId");
+        rvComments = findViewById(R.id.rvComments);
+        comments = new ArrayList<>();
+        adapter = new CommentAdapter(this, comments);
+        rvComments.setAdapter(adapter);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvComments.setLayoutManager(linearLayoutManager);
 
         sendButtonClickSetUp();
+        populateComments();
 
+    }
+
+    private void populateComments() {
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        query.whereEqualTo("postId", postId);
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> objects, ParseException e) {
+                if(e == null) {
+                    comments.addAll(objects);
+                    adapter.notifyItemInserted(0);
+                    rvComments.scrollToPosition(0);
+                } else {
+                    Log.d("HomeActivity", "get post failed");
+                }
+            }
+        });
     }
 
     private void sendButtonClickSetUp() {
@@ -34,23 +74,22 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void createComment() {
-        ParseObject object = ParseObject.create("Comment");
-        //Comment newComment = new Comment();
-//        newComment.setText(etComment.getText().toString());
-//        newComment.setPostId(getIntent().getStringExtra("postId"));
-//        newComment.setUser(ParseUser.getCurrentUser());
-//
-//        newComment.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if(e == null) {
-//                    Log.d("CommentActivity", "Comment saved successfully");
-//                } else {
-//                    Log.d("CommentActivity", "Comment save failed");
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+        Comment newComment = new Comment();
+        newComment.setText(etComment.getText().toString());
+        newComment.setPostId(postId);
+        newComment.setUser(ParseUser.getCurrentUser());
+
+        newComment.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    Log.d("CommentActivity", "Comment saved successfully");
+                } else {
+                    Log.d("CommentActivity", "Comment save failed");
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
 

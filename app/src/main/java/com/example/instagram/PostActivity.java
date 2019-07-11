@@ -42,7 +42,7 @@ public class PostActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String description = etCaption.getText().toString();
                 final ParseUser user = ParseUser.getCurrentUser();
-                final File file = new File (String.valueOf(photoFile)); //would ask the user for their image here
+                final File file = new File (String.valueOf(photoFile));
                 final ParseFile parseFile = new ParseFile(file);
                 createPost(description, parseFile, user);
             }

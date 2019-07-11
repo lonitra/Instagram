@@ -60,10 +60,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 viewHolder.ivImage.setImageBitmap(bitmap);
             }
         });
-        ParseUser user = post.getUser();
+        final ParseUser user = post.getUser();
         viewHolder.tvUser.setText(user.getUsername());
         viewHolder.tvCaption.setText(post.getDescription());
         viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
+        viewHolder.tvUser2.setText(user.getUsername());
 
         if(post.getNumber("number") != null) {
             viewHolder.tvLikes.setText(post.getNumber("number").toString());
@@ -88,6 +89,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             public void onClick(View v) {
                 Intent commentIntent = new Intent(mContext, CommentActivity.class);
                 commentIntent.putExtra("postId", post.getObjectId());
+                commentIntent.putExtra("postCaption", post.getDescription());
+                commentIntent.putExtra("username",user.getUsername());
                 mContext.startActivity(commentIntent);
             }
         });
@@ -138,6 +141,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         TextView tvLikes;
         FloatingActionButton fabLike;
         FloatingActionButton fabComment;
+        TextView tvUser2;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,6 +152,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvLikes = itemView.findViewById(R.id.tvLikes);
             fabLike = itemView.findViewById(R.id.fabFavorite);
             fabComment= itemView.findViewById(R.id.fabComment);
+            tvUser2 = itemView.findViewById(R.id.tvUser2);
             itemView.setOnClickListener(this);
         }
 

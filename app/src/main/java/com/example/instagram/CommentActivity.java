@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.instagram.model.Comment;
 import com.parse.FindCallback;
@@ -27,17 +28,24 @@ public class CommentActivity extends AppCompatActivity {
     private RecyclerView rvComments;
     private List<Comment> comments;
     private CommentAdapter adapter;
+    private TextView tvCaption;
+    private TextView tvUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+        tvCaption = findViewById(R.id.tvCaption);
+        tvCaption.setText(getIntent().getStringExtra("postCaption"));
+        tvUsername = findViewById(R.id.tvUsername);
+        String username = getIntent().getStringExtra("username");
+        tvUsername.setText(username);
         etComment = findViewById(R.id.etComment);
         btnSend = findViewById(R.id.btnSend);
         postId = getIntent().getStringExtra("postId");
         rvComments = findViewById(R.id.rvComments);
         comments = new ArrayList<>();
-        adapter = new CommentAdapter(this, comments);
+        adapter = new CommentAdapter(this, comments, getIntent().getStringExtra("postCaption"));
         rvComments.setAdapter(adapter);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvComments.setLayoutManager(linearLayoutManager);
@@ -50,6 +58,7 @@ public class CommentActivity extends AppCompatActivity {
     private void populateComments() {
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
         query.whereEqualTo("postId", postId);
+        query.include("user");
         query.findInBackground(new FindCallback<Comment>() {
             @Override
             public void done(List<Comment> objects, ParseException e) {

@@ -17,7 +17,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     Context mContext;
     List<Comment> comments;
 
-    public CommentAdapter(Context context, List<Comment> comments) {
+    public CommentAdapter(Context context, List<Comment> comments, String caption) {
         mContext = context;
         this.comments = comments;
     }
@@ -36,6 +36,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         Comment comment = comments.get(i);
         viewHolder.tvComment.setText(comment.getText());
+        viewHolder.tvUser.setText(comment.getUser().getUsername());
     }
 
     @Override

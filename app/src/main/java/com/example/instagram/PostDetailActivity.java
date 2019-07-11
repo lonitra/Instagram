@@ -55,7 +55,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvUsername.setText(post.getUser().getUsername());
         tvCaption.setText(post.getDescription());
         tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
-        if(post.getLikes() != null || post.getLikes().intValue() != 0) {
+        if(post.getLikes() != null && post.getLikes().intValue() != 0) {
             tvLikes.setText(post.getLikes().intValue() + " likes");
         }
         ParseFile file = post.getImage();
@@ -70,7 +70,7 @@ public class PostDetailActivity extends AppCompatActivity {
         setLikeListener(post);
     }
 
-    //sets up like listener and updates backend to reflect likes
+    //sets up like listener and updates backend to reflect number of likes
     private void setLikeListener(final Post post) {
         likeClick = false;
         fabFavorite.setOnClickListener(new View.OnClickListener() {

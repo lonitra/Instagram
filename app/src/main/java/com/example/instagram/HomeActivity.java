@@ -7,25 +7,15 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.instagram.model.Post;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     private static final String imagePath = "./Desktop/smile.jpeg";
@@ -34,47 +24,41 @@ public class HomeActivity extends AppCompatActivity {
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     private File photoFile;
-    private List<Post> posts;
-    private RecyclerView rvPosts;
-    private PostAdapter adapter;
-    private SwipeRefreshLayout swipeContainer;
-    private FloatingActionButton fabLike;
-    private FloatingActionButton fabComment;
-    private FloatingActionButton fabMessage;
     private BottomNavigationView bottomNav;
+    private ViewPager viewPager;
+    private MenuItem prevMenuItem;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        posts = new ArrayList<>();
-        swipeContainer = findViewById(R.id.swipeContainer);
         bottomNav = findViewById(R.id.bottom_navigation);
 
-        fabComment = findViewById(R.id.fabComment);
-        fabMessage = findViewById(R.id.fabMessage);
-        rvPosts = findViewById(R.id.rvPosts);
-        adapter = new PostAdapter(HomeActivity.this, posts);
-        rvPosts.setAdapter(adapter);
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvPosts.setLayoutManager(linearLayoutManager);
-        getPosts();
-        navigationSetUp();
-        swipeToRefresh();
-    }
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(),
+                HomeActivity.this));
 
+        navigationSetUp();
+        bottomNav.setSelectedItemId(R.id.miHome);
+        viewPagerListener();
+    }
 
     private void navigationSetUp() {
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()) {
+                    case R.id.miHome:
+                        viewPager.setCurrentItem(0);
+                        break;
                     case R.id.miCapture:
                         launchCamera();
                         break;
                     case R.id.miProfile:
-                        startActivity(new Intent(HomeActivity.this, LogoutActivity.class));
+                        //startActivity(new Intent(HomeActivity.this, LogoutActivity.class));
+                        viewPager.setCurrentItem(2);
                         break;
 
                 }
@@ -83,41 +67,27 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void swipeToRefresh() {
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    private void viewPagerListener () {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onRefresh() {
-                adapter.clear();
-                getPosts();
-                swipeContainer.setRefreshing(false);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
-        });
 
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(
-                android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-
-    }
-
-    //queries post class and returns list of all the posts
-    private void getPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include("user");
-        query.setLimit(20).orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<Post>() {
             @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e == null) {
-                    posts.addAll(objects);
-                    adapter.notifyItemInserted(0);
-                    rvPosts.scrollToPosition(0);
-                } else {
-                    Log.d("HomeActivity", "get post failed");
-                }
+            public void onPageSelected(int position) {
+                if (prevMenuItem != null)
+                    prevMenuItem.setChecked(false);
+                else
+                    bottomNav.getMenu().getItem(0).setChecked(false);
+
+                bottomNav.getMenu().getItem(position).setChecked(true);
+                prevMenuItem = bottomNav.getMenu().getItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
     }
@@ -154,28 +124,6 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-
-    private void loadTopPosts() {
-        final Post.Query postQuery = new Post.Query();
-        postQuery.getTop().withUser();
-
-
-        postQuery.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> objects, ParseException e) {
-                if(e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        Log.d("HomeActivity", "Post[" + i + "] = " +objects.get(i).getDescription()
-                                + " username= " + objects.get(i).getUser().getUsername());
-                    }
-                } else {
-                    Log.d("HomeActivity", "Post load failed");
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     @Override

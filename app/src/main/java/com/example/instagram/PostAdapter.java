@@ -51,7 +51,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
-        Post post = posts.get(i);
+        final Post post = posts.get(i);
         ParseFile file = post.getImage();
         file.getDataInBackground(new GetDataCallback() {
             @Override
@@ -64,6 +64,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.tvUser.setText(user.getUsername());
         viewHolder.tvCaption.setText(post.getDescription());
         viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
+
         if(post.getNumber("number") != null) {
             viewHolder.tvLikes.setText(post.getNumber("number").toString());
         }
@@ -79,6 +80,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                     viewHolder.fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
                 }
                 likeClick = !likeClick;
+            }
+        });
+
+        viewHolder.fabComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent commentIntent = new Intent(mContext, CommentActivity.class);
+                commentIntent.putExtra("postId", post.getObjectId());
+                mContext.startActivity(commentIntent);
             }
         });
 
@@ -127,6 +137,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         TextView tvDate;
         TextView tvLikes;
         FloatingActionButton fabLike;
+        FloatingActionButton fabComment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -134,8 +145,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvCaption = itemView.findViewById(R.id.tvCaption);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDate = itemView.findViewById(R.id.tvDate);
-            fabLike = itemView.findViewById(R.id.fabFavorite);
             tvLikes = itemView.findViewById(R.id.tvLikes);
+            fabLike = itemView.findViewById(R.id.fabFavorite);
+            fabComment= itemView.findViewById(R.id.fabComment);
             itemView.setOnClickListener(this);
         }
 

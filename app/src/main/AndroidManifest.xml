@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PostDetailActivity"></activity>
+        <activity android:name=".CommentActivity"></activity>
+        <activity android:name=".PostDetailActivity" />
         <activity android:name=".LogoutActivity" />
         <activity
             android:name=".PostActivity"

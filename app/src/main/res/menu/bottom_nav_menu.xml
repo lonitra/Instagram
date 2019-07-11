@@ -4,6 +4,7 @@
 
     <item
         android:icon="@drawable/ic_home_filled"
+        android:id="@+id/miHome"
         android:title=""
         android:enabled="true"
         android:iconTint="@color/gray"

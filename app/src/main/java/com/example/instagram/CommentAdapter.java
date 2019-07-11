@@ -55,4 +55,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             tvUser = itemView.findViewById(R.id.tvUser);
         }
     }
+
+    // Add a list of items -- change to type used
+    public void addAll(List<Comment> list) {
+        comments.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    // Clean all elements of the recycler
+    public void clear() {
+        comments.clear();
+        notifyDataSetChanged();
+    }
 }

@@ -34,7 +34,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         bottomNav = findViewById(R.id.bottom_navigation);
-
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new FragmentAdapter(getSupportFragmentManager(),
@@ -44,6 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomNav.setSelectedItemId(R.id.miHome);
         viewPagerListener();
     }
+
 
     private void navigationSetUp() {
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -132,6 +132,7 @@ public class HomeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.timeline, menu);
         return true;
     }
+
 
     // Returns the File for a photo stored on disk given the fileName
     public File getPhotoFileUri(String fileName) {

@@ -68,6 +68,20 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         setLikeListener(post);
+        setCommentLister(post);
+    }
+
+    private void setCommentLister(final Post post) {
+        fabComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent commentIntent = new Intent(PostDetailActivity.this, CommentActivity.class);
+                commentIntent.putExtra("postId", post.getObjectId());
+                commentIntent.putExtra("postCaption", post.getDescription());
+                commentIntent.putExtra("username",post.getUser().getUsername());
+                PostDetailActivity.this.startActivity(commentIntent);
+            }
+        });
     }
 
     //sets up like listener and updates backend to reflect number of likes

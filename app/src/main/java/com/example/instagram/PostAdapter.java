@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -66,23 +68,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
         viewHolder.tvUser2.setText(user.getUsername());
 
-        if(post.getNumber("number") != null) {
-            viewHolder.tvLikes.setText(post.getNumber("number").toString());
+        if(post.getLikes() != null && post.getLikes().intValue() != 0) {
+            viewHolder.tvLikes.setText(post.getLikes().intValue() + " likes");
         }
 
-        viewHolder.fabLike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!likeClick) {
-                    viewHolder.fabLike.setColorFilter(mContext.getResources().getColor(R.color.medium_red));
-                    viewHolder.fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like_fill));
-                } else {
-                    viewHolder.fabLike.setColorFilter(Color.DKGRAY);
-                    viewHolder.fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-                }
-                likeClick = !likeClick;
-            }
-        });
+        viewHolder.favoriteClickListenerSetUp(post);
 
         viewHolder.fabComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,8 +153,47 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 Post post = posts.get(position);
                 Intent details = new Intent(mContext, PostDetailActivity.class);
                 details.putExtra("PostDetails", post);
+                details.putExtra("position", position);
                 mContext.startActivity(details);
             }
+        }
+
+        private void favoriteClickListenerSetUp(final Post post) {
+            fabLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        if(!likeClick) {
+                            fabLike.setColorFilter(mContext.getResources().getColor(R.color.medium_red));
+                            fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like_fill));
+                            if(post.getLikes() == null || post.getLikes().intValue() == 0) {
+                                post.setLikes(1);
+                            } else {
+                                post.setLikes(post.getLikes().intValue() + 1);
+                            }
+                        } else {
+                            fabLike.setColorFilter(Color.DKGRAY);
+                            fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+                            post.setLikes(post.getLikes().intValue() - 1);
+                        }
+                    if(post.getLikes().intValue() == 0) {
+                        tvLikes.setText(null);
+                    } else {
+                        tvLikes.setText(post.getLikes().intValue() + " likes");
+                    }
+                    post.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e == null) {
+                                Log.d("SaveLikes", "Save successful");
+                            } else {
+                                Log.d("SaveLikes", "Save failed");
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    likeClick = !likeClick;
+                }
+            });
         }
     }
 

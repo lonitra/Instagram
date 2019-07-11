@@ -99,6 +99,9 @@ public class CommentActivity extends AppCompatActivity {
                 }
             }
         });
+        etComment.setText(null);
+        adapter.clear();
+        populateComments();
     }
 }
 

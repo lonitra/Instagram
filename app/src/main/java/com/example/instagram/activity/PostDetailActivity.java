@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.instagram.R;
 import com.example.instagram.model.Post;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -55,7 +56,7 @@ public class PostDetailActivity extends AppCompatActivity {
         tvUsername.setText(post.getUser().getUsername());
         tvCaption.setText(post.getDescription());
         tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
-        if(post.getLikes() != null && post.getLikes().intValue() != 0) {
+        if (post.getLikes() != null && post.getLikes().intValue() != 0) {
             tvLikes.setText(post.getLikes().intValue() + " likes");
         }
         ParseFile file = post.getImage();
@@ -78,7 +79,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 Intent commentIntent = new Intent(PostDetailActivity.this, CommentActivity.class);
                 commentIntent.putExtra("postId", post.getObjectId());
                 commentIntent.putExtra("postCaption", post.getDescription());
-                commentIntent.putExtra("username",post.getUser().getUsername());
+                commentIntent.putExtra("username", post.getUser().getUsername());
                 PostDetailActivity.this.startActivity(commentIntent);
             }
         });
@@ -90,10 +91,10 @@ public class PostDetailActivity extends AppCompatActivity {
         fabFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!likeClick) {
+                if (!likeClick) {
                     fabFavorite.setColorFilter(PostDetailActivity.this.getResources().getColor(R.color.medium_red));
                     fabFavorite.setImageDrawable(ContextCompat.getDrawable(PostDetailActivity.this, R.drawable.ic_like_fill));
-                    if(post.getLikes() == null || post.getLikes().intValue() == 0) {
+                    if (post.getLikes() == null || post.getLikes().intValue() == 0) {
                         post.setLikes(1);
                     } else {
                         post.setLikes(post.getLikes().intValue() + 1);
@@ -103,7 +104,7 @@ public class PostDetailActivity extends AppCompatActivity {
                     fabFavorite.setImageDrawable(ContextCompat.getDrawable(PostDetailActivity.this, R.drawable.ic_like));
                     post.setLikes(post.getLikes().intValue() - 1);
                 }
-                if(post.getLikes().intValue() == 0) {
+                if (post.getLikes().intValue() == 0) {
                     tvLikes.setText(null);
                 } else {
                     tvLikes.setText(post.getLikes().intValue() + " likes");
@@ -111,7 +112,7 @@ public class PostDetailActivity extends AppCompatActivity {
                 post.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
-                        if(e == null) {
+                        if (e == null) {
                             Log.d("SaveLikes", "Save successful");
                         } else {
                             Log.d("SaveLikes", "Save failed");

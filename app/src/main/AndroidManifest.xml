@@ -14,15 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CommentActivity"></activity>
-        <activity android:name=".PostDetailActivity" />
+        <activity android:name=".activity.CommentActivity"></activity>
+        <activity android:name=".activity.PostDetailActivity" />
         <activity android:name=".LogoutActivity" />
         <activity
-            android:name=".PostActivity"
+            android:name=".activity.PostActivity"
             android:label="@string/title_activity_post"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

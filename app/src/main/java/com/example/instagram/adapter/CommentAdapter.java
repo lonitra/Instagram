@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.instagram.R;
 import com.example.instagram.model.Comment;
 
 import java.util.List;

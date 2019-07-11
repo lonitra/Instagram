@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.instagram.R;
+import com.example.instagram.adapter.CommentAdapter;
 import com.example.instagram.model.Comment;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -104,12 +106,3 @@ public class CommentActivity extends AppCompatActivity {
         populateComments();
     }
 }
-
-/*
-
-1. Get creating comment working in the normal way. Figure out why it's asking for ParseObject.create
-2. After comment creation, reload RecyclerList
-3. Make query for finding comments by post ID
-4. On entering CommentActivity, make request for all comments matching post ID
-5. What is `return this` on the queries?
- */

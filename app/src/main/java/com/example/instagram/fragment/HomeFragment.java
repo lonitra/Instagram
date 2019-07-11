@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.instagram.adapter.PostAdapter;
+import com.example.instagram.R;
 import com.example.instagram.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -42,6 +44,7 @@ public class HomeFragment extends Fragment {
         mPage = getArguments().getInt(ARG_PAGE);
         posts = new ArrayList<>();
         adapter = new PostAdapter(getContext(), posts);
+
     }
 
     @Override
@@ -69,7 +72,7 @@ public class HomeFragment extends Fragment {
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> objects, ParseException e) {
-                if(e == null) {
+                if (e == null) {
                     posts.addAll(objects);
                     adapter.notifyItemInserted(0);
                     rvPosts.scrollToPosition(0);
@@ -80,7 +83,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-        private void swipeToRefresh() {
+    private void swipeToRefresh() {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

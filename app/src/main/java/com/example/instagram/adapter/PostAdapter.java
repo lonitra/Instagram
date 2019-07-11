@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.instagram.R;
+import com.example.instagram.activity.CommentActivity;
+import com.example.instagram.activity.PostDetailActivity;
 import com.example.instagram.model.Post;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
@@ -29,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     Context mContext;
     List<Post> posts;
@@ -68,15 +71,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
         viewHolder.tvUser2.setText(user.getUsername());
         ParseFile profilePic = post.getUser().getParseFile("profilePicture");
-        profilePic.getDataInBackground(new GetDataCallback() {
-            @Override
-            public void done(byte[] data, ParseException e) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                viewHolder.ivProfilePic.setImageBitmap(bitmap);
-            }
-        });
+        if (profilePic != null) {
+            profilePic.getDataInBackground(new GetDataCallback() {
+                @Override
+                public void done(byte[] data, ParseException e) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    viewHolder.ivProfilePic.setImageBitmap(bitmap);
+                }
+            });
+        }
 
-        if(post.getLikes() != null && post.getLikes().intValue() != 0) {
+        if (post.getLikes() != null && post.getLikes().intValue() != 0) {
             viewHolder.tvLikes.setText(post.getLikes().intValue() + " likes");
         }
 
@@ -88,7 +93,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 Intent commentIntent = new Intent(mContext, CommentActivity.class);
                 commentIntent.putExtra("postId", post.getObjectId());
                 commentIntent.putExtra("postCaption", post.getDescription());
-                commentIntent.putExtra("username",user.getUsername());
+                commentIntent.putExtra("username", user.getUsername());
                 mContext.startActivity(commentIntent);
             }
         });
@@ -150,7 +155,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             tvDate = itemView.findViewById(R.id.tvDate);
             tvLikes = itemView.findViewById(R.id.tvLikes);
             fabLike = itemView.findViewById(R.id.fabFavorite);
-            fabComment= itemView.findViewById(R.id.fabComment);
+            fabComment = itemView.findViewById(R.id.fabComment);
             tvUser2 = itemView.findViewById(R.id.tvUser2);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             itemView.setOnClickListener(this);
@@ -159,7 +164,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            if(position != RecyclerView.NO_POSITION) {
+            if (position != RecyclerView.NO_POSITION) {
                 Post post = posts.get(position);
                 Intent details = new Intent(mContext, PostDetailActivity.class);
                 details.putExtra("PostDetails", post);
@@ -172,20 +177,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             fabLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        if(!likeClick) {
-                            fabLike.setColorFilter(mContext.getResources().getColor(R.color.medium_red));
-                            fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like_fill));
-                            if(post.getLikes() == null || post.getLikes().intValue() == 0) {
-                                post.setLikes(1);
-                            } else {
-                                post.setLikes(post.getLikes().intValue() + 1);
-                            }
+                    if (!likeClick) {
+                        fabLike.setColorFilter(mContext.getResources().getColor(R.color.medium_red));
+                        fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like_fill));
+                        if (post.getLikes() == null || post.getLikes().intValue() == 0) {
+                            post.setLikes(1);
                         } else {
-                            fabLike.setColorFilter(Color.DKGRAY);
-                            fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
-                            post.setLikes(post.getLikes().intValue() - 1);
+                            post.setLikes(post.getLikes().intValue() + 1);
                         }
-                    if(post.getLikes().intValue() == 0) {
+                    } else {
+                        fabLike.setColorFilter(Color.DKGRAY);
+                        fabLike.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_like));
+                        post.setLikes(post.getLikes().intValue() - 1);
+                    }
+                    if (post.getLikes().intValue() == 0) {
                         tvLikes.setText(null);
                     } else {
                         tvLikes.setText(post.getLikes().intValue() + " likes");
@@ -193,7 +198,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                     post.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if(e == null) {
+                            if (e == null) {
                                 Log.d("SaveLikes", "Save successful");
                             } else {
                                 Log.d("SaveLikes", "Save failed");

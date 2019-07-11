@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.instagram.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         btnSignUp = findViewById(R.id.btnSignUp);
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             Log.d("LoginActivity", "Login successful");
             Intent toHome = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(toHome);

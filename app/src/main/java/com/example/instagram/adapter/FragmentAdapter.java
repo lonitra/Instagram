@@ -1,9 +1,12 @@
-package com.example.instagram;
+package com.example.instagram.adapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.instagram.fragment.HomeFragment;
+import com.example.instagram.fragment.ProfileFragment;
 
 public class FragmentAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;

@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,6 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.instagram.R;
+import com.example.instagram.adapter.FragmentAdapter;
 
 import java.io.File;
 
@@ -47,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch(menuItem.getItemId()) {
+                switch (menuItem.getItemId()) {
                     case R.id.miHome:
                         viewPager.setCurrentItem(0);
                         break;
@@ -64,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void viewPagerListener () {
+    private void viewPagerListener() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -132,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
         File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
 
         // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(APP_TAG, "failed to create directory");
         }
 

@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.activity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.instagram.R;
 import com.example.instagram.model.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;

@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ParseUser.logOut();
-                ParseUser currentUser = ParseUser.getCurrentUser();
+                //ParseUser currentUser = ParseUser.getCurrentUser();
                 startActivity(new Intent(getContext(), MainActivity.class));
             }
         });

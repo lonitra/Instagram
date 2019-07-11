@@ -67,6 +67,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         viewHolder.tvCaption.setText(post.getDescription());
         viewHolder.tvDate.setText(getRelativeTimeAgo(post.getCreatedAt().toString()));
         viewHolder.tvUser2.setText(user.getUsername());
+        ParseFile profilePic = post.getUser().getParseFile("profilePicture");
+        profilePic.getDataInBackground(new GetDataCallback() {
+            @Override
+            public void done(byte[] data, ParseException e) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                viewHolder.ivProfilePic.setImageBitmap(bitmap);
+            }
+        });
 
         if(post.getLikes() != null && post.getLikes().intValue() != 0) {
             viewHolder.tvLikes.setText(post.getLikes().intValue() + " likes");
@@ -132,6 +140,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         FloatingActionButton fabLike;
         FloatingActionButton fabComment;
         TextView tvUser2;
+        ImageView ivProfilePic;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -143,6 +152,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             fabLike = itemView.findViewById(R.id.fabFavorite);
             fabComment= itemView.findViewById(R.id.fabComment);
             tvUser2 = itemView.findViewById(R.id.tvUser2);
+            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             itemView.setOnClickListener(this);
         }
 

@@ -11,14 +11,12 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.File;
 
 public class HomeActivity extends AppCompatActivity {
-    private static final String imagePath = "./Desktop/smile.jpeg";
 
     public final String APP_TAG = "MyCustomApp";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
@@ -57,7 +55,6 @@ public class HomeActivity extends AppCompatActivity {
                         launchCamera();
                         break;
                     case R.id.miProfile:
-                        //startActivity(new Intent(HomeActivity.this, LogoutActivity.class));
                         viewPager.setCurrentItem(2);
                         break;
 
@@ -124,13 +121,6 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.timeline, menu);
-        return true;
     }
 
 

@@ -55,7 +55,7 @@ public class PostActivity extends AppCompatActivity {
         newPost.setDescription(description);
         newPost.setImage(imageFile);
         newPost.setUser(user);
-
+        newPost.setLikes(0);
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

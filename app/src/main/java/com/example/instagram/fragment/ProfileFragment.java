@@ -24,16 +24,15 @@ import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.io.File;
 
 import static android.app.Activity.RESULT_OK;
+import static com.example.instagram.activity.HomeActivity.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE;
 
 
 public class ProfileFragment extends Fragment {
     public static final String ARG_PAGE = "ARG_PAGE";
-    public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public final String APP_TAG = "MyCustomApp";
     public String photoFileName = "photo.jpg";
 
@@ -78,12 +77,12 @@ public class ProfileFragment extends Fragment {
             });
         }
 
-//        btnUpdate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                launchCamera();
-//            }
-//        });
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCamera();
+            }
+        });
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,12 +122,7 @@ public class ProfileFragment extends Fragment {
                 ivProfile.setImageBitmap(image);
                 ParseUser user = ParseUser.getCurrentUser();
                 user.put("profilePicture", photoFile.getAbsoluteFile());
-                user.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Log.d("Update", "Success");
-                    }
-                });
+                user.saveInBackground();
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }

@@ -10,11 +10,24 @@
         android:iconTint="@color/gray"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/miSearch"
+        android:icon="@drawable/ic_search"
+        android:enabled="true"
+        android:title=""
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/miCapture"
         android:icon="@drawable/ic_capture"
         android:enabled="true"
         android:title=""
         android:iconTint="@color/gray"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/miHeart"
+        android:icon="@drawable/ic_like"
+        android:enabled="true"
+        android:title=""
         app:showAsAction="always"/>
 
     <item
